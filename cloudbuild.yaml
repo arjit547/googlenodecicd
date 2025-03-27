@@ -2,7 +2,7 @@ steps:
   # 1. Build the Docker image
   - name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", "us-east4-docker.pkg.dev/arjit-devops/node1/node1:latest", "."]
-
+  
   # 2. Push the Docker image to Artifact Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "us-east4-docker.pkg.dev/arjit-devops/node1/node1:latest"]
@@ -21,5 +21,9 @@ steps:
       - "--platform"
       - "managed"
       - "--allow-unauthenticated"
+
+# Fix the Cloud Build error by specifying logging options
+options:
+  logging: CLOUD_LOGGING_ONLY  # Store logs in Cloud Logging
 
 timeout: "1200s"  # Increase timeout if needed
