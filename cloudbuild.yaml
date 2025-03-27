@@ -1,0 +1,25 @@
+steps:
+  # 1. Build the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "us-east4-docker.pkg.dev/arjit-devops/node1/node1:latest", "."]
+
+  # 2. Push the Docker image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "us-east4-docker.pkg.dev/arjit-devops/node1/node1:latest"]
+
+  # 3. Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "node1-service"
+      - "--image"
+      - "us-east4-docker.pkg.dev/arjit-devops/node1/node1:latest"
+      - "--region"
+      - "us-east4"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+
+timeout: "1200s"  # Increase timeout if needed
